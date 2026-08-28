@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel — JuiceShop{% endblock %}
+{% block content %}
+<h2>Admin Panel</h2>
+
+<div class="card" style="margin-bottom:2rem;">
+  <div class="card-body">
+    <h3>Network Diagnostics</h3>
+    <p style="color:#777;font-size:.85rem;margin:.4rem 0 .75rem;">Ping a host to check connectivity.</p>
+    <form action="/admin/ping" method="post" style="display:flex;gap:.75rem;">
+      <input type="text" name="host" placeholder="Hostname or IP address…" style="flex:1;" />
+      <button class="btn btn-primary">Ping</button>
+    </form>
+  </div>
+</div>
+
+<h3>Users</h3>
+<div class="card" style="margin-bottom:2rem;">
+  <table>
+    <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Admin</th><th>Balance</th></tr></thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ '&#10003;' if u.is_admin else '' }}</td>
+        <td>${{ "%.2f"|format(u.balance) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h3>Recent Orders</h3>
+<div class="card">
+  <table>
+    <thead><tr><th>Order #</th><th>User</th><th>Product</th><th>Qty</th><th>Total</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td>#{{ o.id }}</td>
+        <td>{{ o.username }}</td>
+        <td>{{ o.product_name }}</td>
+        <td>{{ o.quantity }}</td>
+        <td>${{ "%.2f"|format(o.total) }}</td>
+        <td>{{ o.status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

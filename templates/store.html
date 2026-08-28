@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Store — JuiceShop{% endblock %}
+{% block content %}
+<div style="display:flex;gap:1rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;">
+  <h2 style="margin:0;">
+    {% if search_header %}{{ search_header }}{% else %}All Products{% endif %}
+  </h2>
+  <form action="/search" method="get" style="display:flex;gap:.5rem;margin-left:auto;">
+    <input name="q" placeholder="Search products…" style="padding:.4rem .8rem;border:1px solid #ccc;border-radius:5px;" value="{{ request.args.get('q','') }}" />
+    <button class="btn btn-primary" style="padding:.4rem .9rem;">Search</button>
+  </form>
+</div>
+
+<div style="display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+  <a href="/store" class="btn {% if not category %}btn-primary{% else %}btn-secondary{% endif %}" style="padding:.3rem .8rem;font-size:.85rem;">All</a>
+  {% for cat in ['juice', 'apparel', 'accessories', 'gift'] %}
+  <a href="/store?category={{ cat }}"
+     class="btn {% if category == cat %}btn-primary{% else %}btn-secondary{% endif %}"
+     style="padding:.3rem .8rem;font-size:.85rem;text-transform:capitalize;">{{ cat }}</a>
+  {% endfor %}
+</div>
+
+{% if products %}
+<div class="grid">
+  {% for p in products %}
+  <div class="card">
+    <div style="height:160px;background:linear-gradient(135deg,#a5d6a7,#c8e6c9);display:flex;align-items:center;justify-content:center;font-size:3rem;">
+      {% if p.category == 'juice' %}&#x1F964;{% elif p.category == 'apparel' %}&#x1F455;{% elif p.category == 'gift' %}&#x1F381;{% else %}&#x1F6CD;{% endif %}
+    </div>
+    <div class="card-body">
+      <h3>{{ p.name }}</h3>
+      <p style="color:#777;font-size:.85rem;margin:.25rem 0 .5rem;">{{ p.description }}</p>
+      <p style="font-size:.8rem;color:#aaa;">Stock: {{ p.stock }}</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.5rem;">
+        <span class="price">${{ "%.2f"|format(p.price) }}</span>
+        <a href="/product/{{ p.id }}" class="btn btn-primary" style="padding:.3rem .8rem;font-size:.8rem;">Details</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p style="color:#777;">No products found.</p>
+{% endif %}
+{% endblock %}

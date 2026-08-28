@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Profile — JuiceShop{% endblock %}
+{% block content %}
+<h2>My Profile</h2>
+<div class="card" style="max-width:500px;">
+  <div class="card-body">
+    <table style="border:none;">
+      <tr><td style="border:none;font-weight:600;width:120px;">Username</td><td style="border:none;">{{ user.username }}</td></tr>
+      <tr><td style="border:none;font-weight:600;">Email</td><td style="border:none;">{{ user.email or '—' }}</td></tr>
+      <tr><td style="border:none;font-weight:600;">Balance</td><td style="border:none;color:#2e7d32;font-weight:700;">${{ "%.2f"|format(user.balance) }}</td></tr>
+      <tr><td style="border:none;font-weight:600;">Role</td><td style="border:none;">{% if user.is_admin %}Admin{% else %}Customer{% endif %}</td></tr>
+    </table>
+    <div style="margin-top:1.5rem;display:flex;gap:.75rem;">
+      <a href="/orders" class="btn btn-primary">View Orders</a>
+      <a href="/store" class="btn btn-secondary">Shop</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

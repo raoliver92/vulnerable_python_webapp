@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}JuiceShop — Home{% endblock %}
+{% block content %}
+<div style="background:#2e7d32;color:#fff;padding:3rem 2rem;margin:-2rem -1rem 2rem;text-align:center;border-radius:0 0 12px 12px;">
+  <h1 style="font-size:2.5rem;margin-bottom:.5rem;">Fresh Juices Delivered</h1>
+  <p style="font-size:1.1rem;opacity:.9;">Premium drinks, apparel &amp; accessories</p>
+  <a href="/store" class="btn" style="background:#f57c00;color:#fff;margin-top:1.2rem;font-size:1rem;padding:.7rem 2rem;">Shop Now</a>
+</div>
+
+<h2>Featured Products</h2>
+<div class="grid">
+  {% for p in products %}
+  <div class="card">
+    <div style="height:160px;background:linear-gradient(135deg,#a5d6a7,#c8e6c9);display:flex;align-items:center;justify-content:center;font-size:3rem;">
+      {% if p.category == 'juice' %}&#x1F964;{% elif p.category == 'apparel' %}&#x1F455;{% elif p.category == 'gift' %}&#x1F381;{% else %}&#x1F6CD;{% endif %}
+    </div>
+    <div class="card-body">
+      <h3>{{ p.name }}</h3>
+      <p style="color:#777;font-size:.85rem;margin:.25rem 0 .5rem;">{{ p.description }}</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="price">${{ "%.2f"|format(p.price) }}</span>
+        <a href="/product/{{ p.id }}" class="btn btn-primary" style="padding:.3rem .8rem;font-size:.8rem;">View</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

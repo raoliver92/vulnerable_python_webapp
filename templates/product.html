@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — JuiceShop{% endblock %}
+{% block content %}
+<div class="card" style="max-width:700px;">
+  <div style="height:220px;background:linear-gradient(135deg,#a5d6a7,#c8e6c9);display:flex;align-items:center;justify-content:center;font-size:5rem;">
+    {% if product.category == 'juice' %}&#x1F964;{% elif product.category == 'apparel' %}&#x1F455;{% elif product.category == 'gift' %}&#x1F381;{% else %}&#x1F6CD;{% endif %}
+  </div>
+  <div class="card-body">
+    <h1>{{ product.name }}</h1>
+    <p style="color:#555;margin:.5rem 0 1rem;">{{ product.description }}</p>
+    <p class="price" style="font-size:1.5rem;">${{ "%.2f"|format(product.price) }}</p>
+    <p style="color:#777;font-size:.9rem;margin:.5rem 0 1.5rem;">In stock: {{ product.stock }}</p>
+    {% if session.user_id %}
+    <form action="/add_to_cart" method="post" style="display:flex;gap:.75rem;align-items:center;">
+      <input type="hidden" name="product_id" value="{{ product.id }}" />
+      <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" style="width:70px;" />
+      <button class="btn btn-secondary">Add to Cart</button>
+    </form>
+    {% else %}
+    <a href="/login" class="btn btn-primary">Login to Purchase</a>
+    {% endif %}
+  </div>
+</div>
+
+<h2 style="margin-top:2rem;">Customer Reviews</h2>
+{% if reviews %}
+  {% for r in reviews %}
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="card-body">
+      <strong>{{ r.username }}</strong>
+      <span style="color:#f57c00;margin-left:.5rem;">
+        {% for i in range(r.rating) %}&#9733;{% endfor %}{% for i in range(5 - r.rating) %}&#9734;{% endfor %}
+      </span>
+      <!-- Stored XSS: review content rendered without escaping -->
+      <p style="margin-top:.5rem;">{{ r.content | safe }}</p>
+    </div>
+  </div>
+  {% endfor %}
+{% else %}
+  <p style="color:#777;">No reviews yet. Be the first!</p>
+{% endif %}
+
+{% if session.user_id %}
+<div class="card" style="margin-top:1.5rem;">
+  <div class="card-body">
+    <h3>Write a Review</h3>
+    <form action="/review" method="post">
+      <input type="hidden" name="product_id" value="{{ product.id }}" />
+      <div class="form-group" style="margin-top:.75rem;">
+        <label>Rating</label>
+        <select name="rating">
+          {% for i in range(5, 0, -1) %}
+          <option value="{{ i }}">{% for j in range(i) %}&#9733;{% endfor %}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Review</label>
+        <textarea name="content" rows="3" placeholder="Share your thoughts…"></textarea>
+      </div>
+      <button class="btn btn-primary">Submit Review</button>
+    </form>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}JuiceShop{% endblock %}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f7f0; color: #333; }
+    nav { background: #2e7d32; padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1.5rem; }
+    nav .brand { color: #fff; font-size: 1.4rem; font-weight: 700; text-decoration: none; margin-right: auto; }
+    nav a { color: #c8e6c9; text-decoration: none; font-size: 0.95rem; }
+    nav a:hover { color: #fff; }
+    .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+    .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.08); overflow: hidden; }
+    .card-body { padding: 1rem; }
+    .card-body h3 { font-size: 1rem; margin-bottom: .25rem; }
+    .price { color: #2e7d32; font-weight: 700; font-size: 1.1rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; }
+    .btn { display: inline-block; padding: .5rem 1.2rem; border-radius: 5px; border: none; cursor: pointer; font-size: .9rem; text-decoration: none; }
+    .btn-primary { background: #2e7d32; color: #fff; }
+    .btn-primary:hover { background: #1b5e20; }
+    .btn-secondary { background: #f57c00; color: #fff; }
+    .btn-secondary:hover { background: #e65100; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: .3rem; font-weight: 500; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: .5rem .75rem; border: 1px solid #ccc; border-radius: 5px; font-size: .95rem;
+    }
+    .alert { padding: .75rem 1rem; border-radius: 5px; margin-bottom: 1rem; }
+    .alert-danger { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+    h1, h2 { margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: .6rem 1rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f1f8e9; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="brand" href="/">&#x1F964; JuiceShop</a>
+    <a href="/store">Store</a>
+    <a href="/search">Search</a>
+    {% if session.user_id %}
+      <a href="/cart">&#x1F6D2; Cart</a>
+      <a href="/orders">Orders</a>
+      <a href="/profile">{{ session.username }}</a>
+      {% if session.is_admin %}<a href="/admin">Admin</a>{% endif %}
+      <a href="/logout">Logout</a>
+    {% else %}
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    {% endif %}
+  </nav>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
